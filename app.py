@@ -293,6 +293,29 @@ def api_scrape():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 
+# ── API: 네이버 백필 ─────────────────────────────────────────
+
+@app.route('/api/backfill', methods=['POST'])
+def api_backfill():
+    key = request.args.get('key', '') or request.headers.get('X-Scrape-Key', '')
+    if not _verify_scrape_secret(key):
+        abort(403)
+
+    try:
+        import backfill_naver
+        pages = int(request.args.get('pages', 10))
+        query = request.args.get('query', None)
+        queries = [query] if query else backfill_naver.QUERIES
+        total = backfill_naver.backfill(queries, max_pages=pages)
+
+        import tagger
+        tagged = tagger.tag_untagged(batch_size=200)
+
+        return jsonify({'status': 'ok', 'new_articles': total, 'tagged': tagged})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+
 # ── API: 통계 (헬스체크 겸) ───────────────────────────────────
 
 @app.route('/api/stats')
