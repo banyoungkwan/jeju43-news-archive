@@ -1,0 +1,30 @@
+name: Daily News Scrape
+
+on:
+  schedule:
+    # 매일 오전 9시 KST (00:00 UTC)
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    # 수동 실행 가능
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Trigger scrape endpoint
+        run: |
+          echo "Triggering scrape on jeju43-news.fly.dev..."
+          response=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X POST \
+            -H "X-Scrape-Key: ${{ secrets.SCRAPE_SECRET }}" \
+            --max-time 900 \
+            "https://jeju43-news.fly.dev/api/scrape")
+
+          echo "HTTP status: $response"
+          if [ "$response" != "200" ]; then
+            echo "Scrape failed with status $response"
+            exit 1
+          fi
+          echo "Scrape completed successfully."

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}관련 인물 — 제주4·3 뉴스 아카이브{% endblock %}
+
+{% block content %}
+<div class="section-pad">
+  <div class="container">
+
+    <div class="section-header">
+      <h1 class="section-title">관련 인물별 보도</h1>
+    </div>
+    <p class="text-muted" style="font-size:.875rem; margin-bottom:28px; max-width:640px">
+      제주4·3과 관련된 주요 인물이 언급된 기사를 모아볼 수 있습니다.
+      군·경 지휘관, 정치인, 종교인 등 관련 인물을 선택하세요.
+    </p>
+
+    <!-- 인물 목록 -->
+    <div class="figure-grid" style="margin-bottom:36px;">
+      {% for f in figures_summary %}
+      <a href="{{ url_for('figures', name=f.figure_name) }}"
+         class="figure-chip {% if selected == f.figure_name %}active{% endif %}">
+        {{ f.figure_name }}
+        <span class="figure-count">{{ f.cnt }}</span>
+      </a>
+      {% endfor %}
+    </div>
+
+    <!-- 선택된 인물의 기사 -->
+    {% if selected %}
+    <div class="section-header" style="margin-top:8px;">
+      <h2 class="section-title">{{ selected }} 관련 기사 <span class="text-muted" style="font-size:1rem">({{ pagination.total }}건)</span></h2>
+      <a href="{{ url_for('figures') }}" class="section-more">인물 목록으로</a>
+    </div>
+
+    {% if articles %}
+    <div class="articles-list">
+      {% for a in articles %}
+      <div class="list-item">
+        <div>
+          <a href="{{ url_for('article_detail', article_id=a.id) }}" class="list-title">
+            {{ a.title }}
+          </a>
+          <div class="list-meta">
+            <span class="list-outlet">{{ a.media_outlet or '–' }}</span>
+            <span class="card-lang">{{ a.language or 'ko' }}</span>
+            {% if a.topics %}
+              {% for topic in a.topics.split(',')[:2] %}
+              <span class="topic-badge"
+                    style="background:{{ topic_colors.get(topic.strip(),'#888') }}">
+                {{ topic.strip() }}
+              </span>
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="list-side">
+          <span class="list-date">{{ (a.published_at or '')[:10] }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if pagination.total_pages > 1 %}
+    <div class="pagination">
+      {% if pagination.has_prev %}
+      <a href="?name={{ selected }}&page={{ pagination.page - 1 }}" class="page-btn">←</a>
+      {% endif %}
+      {% for p in range([1, pagination.page-2]|max, [pagination.total_pages+1, pagination.page+3]|min) %}
+      <a href="?name={{ selected }}&page={{ p }}"
+         class="page-btn {% if p == pagination.page %}active{% endif %}">{{ p }}</a>
+      {% endfor %}
+      {% if pagination.has_next %}
+      <a href="?name={{ selected }}&page={{ pagination.page + 1 }}" class="page-btn">→</a>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <p class="text-muted">해당 인물 관련 기사가 아직 없습니다.</p>
+    {% endif %}
+
+    {% else %}
+    <p class="text-muted">위에서 인물을 선택하면 관련 기사를 볼 수 있습니다.</p>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

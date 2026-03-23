@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}소개 — 제주4·3 뉴스 아카이브{% endblock %}
+
+{% block content %}
+<div class="about-page">
+  <div class="container">
+    <div class="about-content">
+
+      <h1>제주4·3 뉴스 아카이브</h1>
+
+      <h2>프로젝트 소개</h2>
+      <p>
+        이 아카이브는 1948년 제주4·3사건부터 현재까지 국내외 언론이 제주4·3을 어떻게 보도해 왔는지
+        기록하고 보존하기 위해 만들어졌습니다.
+      </p>
+      <p>
+        제주4·3사건이 직접 언급된 기사뿐 아니라, 관련 주요 인물(이승만, 조병옥, 박진경, 김익렬 등)이
+        언급된 기사와 한국전쟁 전후 민간인 학살 유해발굴 관련 뉴스도 함께 수집합니다.
+      </p>
+
+      <h2>수집 방식</h2>
+      <p>
+        매일 정해진 시간에 국내외 주요 언론사의 RSS 피드를 자동 수집합니다.
+        수집된 기사는 Claude AI를 통해 주제 분류, 키워드 태깅, 요약이 자동으로 생성됩니다.
+        가능한 경우 기사 전문을 저장하며, 불가능한 경우 원문 링크를 제공합니다.
+      </p>
+
+      <h2>수집 대상 언론사</h2>
+      {% if outlets %}
+      <table class="outlet-table" style="margin-top:12px;">
+        <thead>
+          <tr>
+            <th>언론사</th>
+            <th>언어</th>
+            <th>수집 기사 수</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for o in outlets %}
+          <tr>
+            <td>{{ o.media_outlet }}</td>
+            <td><span class="card-lang">{{ o.language }}</span></td>
+            <td>{{ o.cnt }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+
+      <h2>주제 분류</h2>
+      <p>기사는 다음 10가지 주제로 자동 분류됩니다:</p>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
+        <span class="topic-badge" style="background:#e74c3c; font-size:.85rem; padding:4px 12px">진상규명</span>
+        <span class="topic-badge" style="background:#9b59b6; font-size:.85rem; padding:4px 12px">추모/기념</span>
+        <span class="topic-badge" style="background:#1abc9c; font-size:.85rem; padding:4px 12px">유해발굴</span>
+        <span class="topic-badge" style="background:#2980b9; font-size:.85rem; padding:4px 12px">법제화</span>
+        <span class="topic-badge" style="background:#f39c12; font-size:.85rem; padding:4px 12px">해외반응</span>
+        <span class="topic-badge" style="background:#27ae60; font-size:.85rem; padding:4px 12px">명예회복</span>
+        <span class="topic-badge" style="background:#e67e22; font-size:.85rem; padding:4px 12px">관련인물</span>
+        <span class="topic-badge" style="background:#7f8c8d; font-size:.85rem; padding:4px 12px">부정/논쟁</span>
+        <span class="topic-badge" style="background:#8e44ad; font-size:.85rem; padding:4px 12px">문화/예술</span>
+        <span class="topic-badge" style="background:#16a085; font-size:.85rem; padding:4px 12px">교육</span>
+      </div>
+
+      <h2>현황</h2>
+      {% if stats %}
+      <div style="display:flex; gap:32px; flex-wrap:wrap; margin-top:8px;">
+        <div class="stat-item" style="text-align:left;">
+          <div class="stat-num" style="color:var(--dark)">{{ stats.total }}</div>
+          <div class="stat-label">총 기사</div>
+        </div>
+        <div class="stat-item" style="text-align:left;">
+          <div class="stat-num" style="color:var(--dark)">{{ stats.ko }}</div>
+          <div class="stat-label">한국어</div>
+        </div>
+        <div class="stat-item" style="text-align:left;">
+          <div class="stat-num" style="color:var(--dark)">{{ stats.en }}</div>
+          <div class="stat-label">영문</div>
+        </div>
+        <div class="stat-item" style="text-align:left;">
+          <div class="stat-num" style="color:var(--dark)">{{ stats.outlets }}</div>
+          <div class="stat-label">언론사</div>
+        </div>
+      </div>
+      {% if stats.last_run %}
+      <p class="text-muted" style="font-size:.82rem; margin-top:16px">
+        마지막 수집: {{ stats.last_run[:16] }}
+      </p>
+      {% endif %}
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}접근 거부 — 제주4·3 뉴스 아카이브{% endblock %}
+{% block content %}
+<div class="error-page">
+  <div class="error-code">403</div>
+  <p class="error-msg">접근 권한이 없습니다.</p>
+  <a href="{{ url_for('index') }}" class="error-back">홈으로 돌아가기</a>
+</div>
+{% endblock %}

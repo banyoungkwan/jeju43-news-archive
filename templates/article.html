@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.title }} — 제주4·3 뉴스 아카이브{% endblock %}
+
+{% block content %}
+<div class="article-page">
+  <div class="container article-layout">
+
+    <!-- 본문 -->
+    <div>
+      <div class="article-header">
+        <!-- 브레드크럼 -->
+        <div style="font-size:.8rem; color:var(--muted); margin-bottom:16px;">
+          <a href="{{ url_for('index') }}">홈</a>
+          <span style="margin:0 6px">›</span>
+          <a href="{{ url_for('articles') }}">기사</a>
+          <span style="margin:0 6px">›</span>
+          <span>{{ article.media_outlet }}</span>
+        </div>
+
+        <h1 class="article-title">{{ article.title }}</h1>
+
+        <div class="article-byline">
+          <span class="byline-outlet">{{ article.media_outlet or '–' }}</span>
+          {% if article.author %}<span>{{ article.author }}</span>{% endif %}
+          <span>{{ (article.published_at or '')[:10] }}</span>
+          <span class="card-lang">{{ article.language or 'ko' }}</span>
+          {% if article.fetch_method == 'full_text' %}
+          <span class="fetch-badge">전문 수록</span>
+          {% else %}
+          <span class="fetch-badge external">외부 링크</span>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- 주제 배지 -->
+      {% if topics %}
+      <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:20px;">
+        {% for t in topics %}
+        <a href="{{ url_for('articles', topic=t) }}">
+          <span class="topic-badge" style="background:{{ topic_colors.get(t,'#888') }}; font-size:.8rem; padding:4px 10px">
+            {{ t }}
+          </span>
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- AI 요약 -->
+      {% if article.summary %}
+      <div class="article-summary">
+        <strong style="font-size:.75rem; text-transform:uppercase; letter-spacing:.05em; color:var(--accent)">요약</strong>
+        <p style="margin-top:6px">{{ article.summary }}</p>
+      </div>
+      {% endif %}
+
+      <!-- 본문 or 외부링크 -->
+      {% if article.content_text %}
+      <div class="article-content">
+        {% for para in article.content_text.split('\n') %}
+        {% if para.strip() %}<p>{{ para.strip() }}</p>{% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <div style="margin-top:24px; padding-top:20px; border-top:1px solid var(--border);">
+        <a href="{{ article.url }}" target="_blank" rel="noopener" class="article-external-link">
+          원문 보기
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+            <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- 사이드바 -->
+    <aside class="article-sidebar">
+
+      <!-- 태그 -->
+      {% if tags %}
+      <div class="sidebar-card">
+        <h3>태그</h3>
+        <div class="tag-cloud">
+          {% for tag in tags %}
+          <a href="{{ url_for('articles', tag=tag) }}" class="tag">{{ tag }}</a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- 언급 인물 -->
+      {% if figures %}
+      <div class="sidebar-card">
+        <h3>언급 인물</h3>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          {% for fig in figures %}
+          <a href="{{ url_for('figures', name=fig) }}"
+             style="font-size:.875rem; color:var(--accent); font-weight:500">
+            {{ fig }} →
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- 관련 기사 -->
+      {% if related %}
+      <div class="sidebar-card">
+        <h3>관련 기사</h3>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          {% for r in related %}
+          <div>
+            <a href="{{ url_for('article_detail', article_id=r.id) }}"
+               style="font-size:.875rem; font-family:var(--serif); line-height:1.4; font-weight:600; color:var(--dark)">
+              {{ r.title[:60] }}{% if r.title|length > 60 %}…{% endif %}
+            </a>
+            <div style="font-size:.75rem; color:var(--muted); margin-top:3px">
+              {{ r.media_outlet }} · {{ (r.published_at or '')[:10] }}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+    </aside>
+  </div>
+</div>
+{% endblock %}

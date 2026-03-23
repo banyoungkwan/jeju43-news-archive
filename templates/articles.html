@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}기사 목록 — 제주4·3 뉴스 아카이브{% endblock %}
+
+{% block content %}
+
+<!-- 필터 바 -->
+<div class="filter-bar">
+  <div class="container filter-inner">
+    <form method="get" id="filterForm" style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; width:100%">
+
+      <select name="lang" class="filter-select" onchange="this.form.submit()">
+        <option value="">전체 언어</option>
+        <option value="ko" {% if filters.lang == 'ko' %}selected{% endif %}>한국어</option>
+        <option value="en" {% if filters.lang == 'en' %}selected{% endif %}>English</option>
+        <option value="other" {% if filters.lang == 'other' %}selected{% endif %}>기타</option>
+      </select>
+
+      <select name="outlet" class="filter-select" onchange="this.form.submit()">
+        <option value="">전체 언론사</option>
+        {% for o in outlets %}
+        <option value="{{ o.media_outlet }}" {% if filters.outlet == o.media_outlet %}selected{% endif %}>
+          {{ o.media_outlet }} ({{ o.cnt }})
+        </option>
+        {% endfor %}
+      </select>
+
+      <select name="topic" class="filter-select" onchange="this.form.submit()">
+        <option value="">전체 주제</option>
+        {% for t in topics %}
+        <option value="{{ t }}" {% if filters.topic == t %}selected{% endif %}>{{ t }}</option>
+        {% endfor %}
+      </select>
+
+      <input type="number" name="year_from" placeholder="시작 연도" min="1960" max="2099"
+             value="{{ filters.year_from }}" class="filter-select" style="width:110px"
+             onchange="this.form.submit()">
+      <input type="number" name="year_to" placeholder="종료 연도" min="1960" max="2099"
+             value="{{ filters.year_to }}" class="filter-select" style="width:110px"
+             onchange="this.form.submit()">
+
+      <select name="sort" class="filter-select" onchange="this.form.submit()">
+        <option value="published_at" {% if filters.sort == 'published_at' %}selected{% endif %}>날짜순</option>
+        <option value="created_at"   {% if filters.sort == 'created_at' %}selected{% endif %}>수집순</option>
+        <option value="media_outlet" {% if filters.sort == 'media_outlet' %}selected{% endif %}>언론사순</option>
+      </select>
+
+      <select name="dir" class="filter-select" onchange="this.form.submit()">
+        <option value="desc" {% if filters.dir == 'desc' %}selected{% endif %}>최신순</option>
+        <option value="asc"  {% if filters.dir == 'asc'  %}selected{% endif %}>오래된순</option>
+      </select>
+
+      {% if filters.tag %}
+      <input type="hidden" name="tag" value="{{ filters.tag }}">
+      <span class="tag filter-active">태그: {{ filters.tag }} <a href="{{ url_for('articles') }}" style="color:inherit; margin-left:4px">✕</a></span>
+      {% endif %}
+
+      {% if filters.figure %}
+      <input type="hidden" name="figure" value="{{ filters.figure }}">
+      <span class="tag filter-active">인물: {{ filters.figure }} <a href="{{ url_for('articles') }}" style="color:inherit; margin-left:4px">✕</a></span>
+      {% endif %}
+
+      {% if filters.lang or filters.outlet or filters.topic or filters.year_from or filters.year_to %}
+      <a href="{{ url_for('articles') }}" style="font-size:.8rem; color:var(--accent); margin-left:auto">필터 초기화</a>
+      {% endif %}
+
+    </form>
+  </div>
+</div>
+
+<!-- 기사 목록 -->
+<div class="section-pad">
+  <div class="container">
+
+    <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:20px;">
+      <p class="text-muted" style="font-size:.875rem;">
+        총 <strong style="color:var(--dark)">{{ pagination.total }}</strong>건
+        {% if pagination.total_pages > 1 %}
+        ({{ pagination.page }} / {{ pagination.total_pages }} 페이지)
+        {% endif %}
+      </p>
+    </div>
+
+    {% if articles %}
+    <div class="articles-list">
+      {% for a in articles %}
+      <div class="list-item">
+        <div>
+          <a href="{{ url_for('article_detail', article_id=a.id) }}" class="list-title">
+            {{ a.title }}
+          </a>
+          <div class="list-meta">
+            <span class="list-outlet">{{ a.media_outlet or '–' }}</span>
+            <span class="card-lang">{{ a.language or 'ko' }}</span>
+            {% if a.author %}<span>{{ a.author }}</span>{% endif %}
+            {% if a.topics %}
+              {% for topic in a.topics.split(',')[:2] %}
+              <a href="{{ url_for('articles', topic=topic.strip()) }}">
+                <span class="topic-badge"
+                      style="background:{{ topic_colors.get(topic.strip(), '#888') }}">
+                  {{ topic.strip() }}
+                </span>
+              </a>
+              {% endfor %}
+            {% endif %}
+            {% if a.tags %}
+              {% for tag in a.tags.split(',')[:3] %}
+              <a href="{{ url_for('articles', tag=tag.strip()) }}" class="tag">{{ tag.strip() }}</a>
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+        <div class="list-side">
+          <span class="list-date">{{ (a.published_at or '')[:10] }}</span>
+          {% if a.fetch_method == 'full_text' %}
+          <span class="fetch-badge">전문</span>
+          {% else %}
+          <span class="fetch-badge external">링크</span>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- 페이지네이션 -->
+    {% if pagination.total_pages > 1 %}
+    <div class="pagination">
+      {% if pagination.has_prev %}
+      <a href="?{{ request.query_string.decode() | replace('page='+pagination.page|string, 'page='+(pagination.page-1)|string) }}"
+         class="page-btn">←</a>
+      {% endif %}
+
+      {% for p in range([1, pagination.page-2]|max, [pagination.total_pages+1, pagination.page+3]|min) %}
+      <a href="?{{ request.query_string.decode() | replace('page='+pagination.page|string, 'page='+p|string) if 'page=' in request.query_string.decode() else request.query_string.decode() + '&page=' + p|string }}"
+         class="page-btn {% if p == pagination.page %}active{% endif %}">{{ p }}</a>
+      {% endfor %}
+
+      {% if pagination.has_next %}
+      <a href="?{{ request.query_string.decode() | replace('page='+pagination.page|string, 'page='+(pagination.page+1)|string) if 'page=' in request.query_string.decode() else request.query_string.decode() + '&page=' + (pagination.page+1)|string }}"
+         class="page-btn">→</a>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <p class="text-muted">조건에 맞는 기사가 없습니다.</p>
+    {% endif %}
+
+  </div>
+</div>
+
+{% endblock %}

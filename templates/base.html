@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}제주4.3 뉴스 아카이브{% endblock %}</title>
+  <meta name="description" content="제주4.3사건 관련 국내외 언론 보도 아카이브">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+
+<!-- 상단 배너 -->
+<div class="top-banner">
+  <span>제주4·3 관련 국내외 언론 보도를 매일 자동으로 수집·아카이빙합니다</span>
+</div>
+
+<!-- 헤더 -->
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="{{ url_for('index') }}" class="site-logo">
+      <span class="logo-ko">제주4·3</span>
+      <span class="logo-divider">|</span>
+      <span class="logo-en">뉴스 아카이브</span>
+    </a>
+
+    <nav class="main-nav" id="mainNav">
+      <a href="{{ url_for('articles') }}" class="nav-link {% if request.endpoint == 'articles' %}active{% endif %}">기사</a>
+      <a href="{{ url_for('timeline') }}" class="nav-link {% if request.endpoint == 'timeline' %}active{% endif %}">타임라인</a>
+      <a href="{{ url_for('figures') }}" class="nav-link {% if request.endpoint == 'figures' %}active{% endif %}">관련 인물</a>
+      <a href="{{ url_for('about') }}" class="nav-link {% if request.endpoint == 'about' %}active{% endif %}">소개</a>
+    </nav>
+
+    <form class="header-search" action="{{ url_for('search') }}" method="get">
+      <input type="search" name="q" placeholder="기사 검색…"
+             value="{{ request.args.get('q', '') }}" autocomplete="off">
+      <button type="submit" aria-label="검색">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
+    </form>
+
+    <!-- 모바일 햄버거 버튼 -->
+    <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('navToggle');
+  const nav    = document.getElementById('mainNav');
+  toggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+    toggle.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
+  });
+  // 링크 클릭 시 메뉴 닫기
+  nav.querySelectorAll('.nav-link').forEach(a =>
+    a.addEventListener('click', () => { nav.classList.remove('open'); toggle.classList.remove('open'); })
+  );
+</script>
+
+<!-- 본문 -->
+<main class="site-main">
+  {% block content %}{% endblock %}
+</main>
+
+<!-- 푸터 -->
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-left">
+      <p class="footer-title">제주4·3 뉴스 아카이브</p>
+      <p class="footer-desc">국내외 언론의 제주4·3 관련 보도를 수집·보존합니다.</p>
+    </div>
+    <div class="footer-right">
+      <p>© 2025 제주4·3 뉴스 아카이브</p>
+    </div>
+  </div>
+</footer>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>

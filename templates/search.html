@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}검색{% if query %}: {{ query }}{% endif %} — 제주4·3 뉴스 아카이브{% endblock %}
+
+{% block content %}
+<div class="search-page">
+  <div class="container">
+
+    <h1 class="section-title" style="margin-bottom:24px">기사 검색</h1>
+
+    <form class="search-form-large" method="get" action="{{ url_for('search') }}">
+      <input type="search" name="q" class="search-input-large"
+             placeholder="키워드, 인물명, 언론사…"
+             value="{{ query }}" autofocus autocomplete="off">
+      <button type="submit" class="search-btn-large">검색</button>
+    </form>
+
+    {% if query %}
+      <p class="search-result-count">
+        "<strong>{{ query }}</strong>" 검색 결과 —
+        <strong>{{ pagination.total }}</strong>건
+      </p>
+
+      {% if articles %}
+      <div class="articles-list">
+        {% for a in articles %}
+        <div class="list-item">
+          <div>
+            <a href="{{ url_for('article_detail', article_id=a.id) }}" class="list-title">
+              {{ a.title }}
+            </a>
+            <div class="list-meta">
+              <span class="list-outlet">{{ a.media_outlet or '–' }}</span>
+              <span class="card-lang">{{ a.language or 'ko' }}</span>
+              {% if a.topics %}
+                {% for topic in a.topics.split(',')[:2] %}
+                <span class="topic-badge"
+                      style="background:{{ topic_colors.get(topic.strip(),'#888') }}">
+                  {{ topic.strip() }}
+                </span>
+                {% endfor %}
+              {% endif %}
+              {% if a.summary %}
+              <span style="color:#555; font-size:.8rem">{{ a.summary[:100] }}…</span>
+              {% endif %}
+            </div>
+          </div>
+          <div class="list-side">
+            <span class="list-date">{{ (a.published_at or '')[:10] }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% if pagination.total_pages > 1 %}
+      <div class="pagination">
+        {% if pagination.has_prev %}
+        <a href="?q={{ query }}&page={{ pagination.page - 1 }}" class="page-btn">←</a>
+        {% endif %}
+        {% for p in range([1, pagination.page-2]|max, [pagination.total_pages+1, pagination.page+3]|min) %}
+        <a href="?q={{ query }}&page={{ p }}"
+           class="page-btn {% if p == pagination.page %}active{% endif %}">{{ p }}</a>
+        {% endfor %}
+        {% if pagination.has_next %}
+        <a href="?q={{ query }}&page={{ pagination.page + 1 }}" class="page-btn">→</a>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% else %}
+      <p class="text-muted">검색 결과가 없습니다. 다른 키워드로 시도해 보세요.</p>
+      {% endif %}
+
+    {% else %}
+    <p class="text-muted">검색어를 입력하세요.</p>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

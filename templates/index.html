@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+{% block title %}제주4·3 뉴스 아카이브{% endblock %}
+
+{% block content %}
+
+<!-- 히어로 -->
+<section class="hero">
+  <div class="container hero-inner">
+    <div>
+      <h1 class="hero-title">
+        <em>제주4·3</em><br>언론 보도 아카이브
+      </h1>
+      <p class="hero-sub">
+        국내외 언론의 제주4·3 관련 보도를 수집·보존합니다.<br>
+        관련 인물 보도 및 유해발굴 뉴스를 포함합니다.
+      </p>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">{{ stats.total | default(0) }}</div>
+        <div class="stat-label">수집 기사</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">{{ stats.outlets | default(0) }}</div>
+        <div class="stat-label">언론사</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">{{ stats.ko | default(0) }}</div>
+        <div class="stat-label">한국어</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">{{ stats.en | default(0) }}</div>
+        <div class="stat-label">English</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 최신 보도 타임라인 -->
+<section class="section-pad">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">최신 보도</h2>
+      <a href="{{ url_for('articles') }}" class="section-more">전체 기사 →</a>
+    </div>
+
+    {% if timeline_clusters %}
+    <div class="news-timeline">
+
+      {% for date, clusters in timeline_clusters.items() %}
+      <div class="tl-day">
+
+        <!-- 날짜 마커 -->
+        <div class="tl-date-col">
+          <div class="tl-date-badge">
+            <span class="tl-month">{{ date[5:7] }}월</span>
+            <span class="tl-day-num">{{ date[8:10] }}</span>
+            <span class="tl-year">{{ date[:4] }}</span>
+          </div>
+          <div class="tl-line"></div>
+        </div>
+
+        <!-- 해당 날짜 기사들 -->
+        <div class="tl-items">
+          {% for c in clusters %}
+          <a href="{{ url_for('cluster_detail', cluster_id=c.cluster_id) }}" class="tl-item">
+
+            <div class="tl-dot {% if c.article_count > 1 %}multi{% endif %}"></div>
+
+            <div class="tl-content">
+              <div class="tl-meta">
+                {% set outlet_list = (c.outlets or '').split(',') %}
+                <span class="tl-outlet">{{ outlet_list[0].strip() }}</span>
+                {% if outlet_list | length > 1 %}
+                <span class="tl-extra">외 {{ outlet_list | length - 1 }}건</span>
+                {% endif %}
+                {% if c.topics %}
+                  {% for topic in c.topics.split(',')[:1] %}
+                  <span class="topic-badge tl-topic"
+                        style="background:{{ topic_colors.get(topic.strip(), '#888') }}">
+                    {{ topic.strip() }}
+                  </span>
+                  {% endfor %}
+                {% endif %}
+              </div>
+              <h3 class="tl-title">{{ c.event_title }}</h3>
+              {% if c.rep_summary %}
+              <p class="tl-summary">{{ c.rep_summary }}</p>
+              {% endif %}
+            </div>
+
+          </a>
+          {% endfor %}
+        </div>
+
+      </div>
+      {% endfor %}
+
+    </div>
+    {% else %}
+    <p class="text-muted">최근 수집된 기사가 없습니다. 스크래핑을 실행해 주세요.</p>
+    {% endif %}
+  </div>
+</section>
+
+<!-- 월별 키워드 타임라인 -->
+{% if monthly_keywords %}
+<section class="section-pad" style="background:var(--dark); border-top:2px solid var(--accent);">
+  <div class="container">
+    <div class="section-header" style="border-bottom-color:#444;">
+      <h2 class="section-title" style="color:var(--white);">월별 주요 키워드</h2>
+      <a href="{{ url_for('timeline') }}" class="section-more">전체 타임라인 →</a>
+    </div>
+
+    <div class="monthly-timeline">
+      {% for m in monthly_keywords %}
+      <div class="mt-row">
+
+        <!-- 월 레이블 -->
+        <div class="mt-month-col">
+          <div class="mt-month-badge">
+            <span class="mt-year">{{ m.month[:4] }}</span>
+            <span class="mt-mon">{{ m.month[5:7] }}월</span>
+          </div>
+          <div class="mt-count">{{ m.article_count }}건</div>
+        </div>
+
+        <!-- 키워드 영역 -->
+        <div class="mt-keywords">
+          <!-- 주제 배지 먼저 -->
+          {% for tp in m.topics %}
+          <a href="{{ url_for('articles', topic=tp.topic, year_from=m.month[:4], year_to=m.month[:4]) }}">
+            <span class="topic-badge mt-topic-chip"
+                  style="background:{{ topic_colors.get(tp.topic,'#555') }}">
+              {{ tp.topic }}
+              <span class="mt-cnt">{{ tp.cnt }}</span>
+            </span>
+          </a>
+          {% endfor %}
+          <!-- 태그 -->
+          {% for t in m.tags %}
+          <a href="{{ url_for('articles', tag=t.tag) }}" class="mt-tag">
+            {{ t.tag }}
+            <span class="mt-cnt">{{ t.cnt }}</span>
+          </a>
+          {% endfor %}
+        </div>
+
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- 주제별 히트맵 타임라인 -->
+{% if years %}
+<section class="section-pad timeline-preview">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">주제별 보도 분포</h2>
+      <a href="{{ url_for('timeline') }}" class="section-more">전체 타임라인 →</a>
+    </div>
+    <p style="font-size:.82rem; color:var(--muted); margin-bottom:20px;">
+      연도별 언론 보도 주제 분포. 셀 클릭 시 해당 기사 목록으로 이동합니다.
+    </p>
+    <div class="heatmap-wrap">
+      <table class="heatmap-table">
+        <thead>
+          <tr>
+            <th class="year-col">연도</th>
+            {% for topic in topics %}
+            <th>{{ topic }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody id="heatmapBody"></tbody>
+      </table>
+    </div>
+    <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:14px;">
+      {% for topic in topics %}
+      <span class="topic-badge" style="background:{{ topic_colors.get(topic,'#888') }}; font-size:.72rem">{{ topic }}</span>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- 키워드 클라우드 -->
+{% if top_tags %}
+<section class="section-pad" style="background:var(--white); border-top:1px solid var(--border);">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">주요 키워드</h2>
+    </div>
+    <div class="tag-cloud">
+      {% for t in top_tags %}
+      <a href="{{ url_for('articles', tag=t.tag) }}"
+         class="tag"
+         style="font-size:{{ [0.72 + (t.cnt / ([top_tags[0].cnt, 1]|max)) * 0.55, 1.2]|min }}rem">
+        {{ t.tag }}
+        <span style="color:var(--muted);font-size:.7em">({{ t.cnt }})</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+const yearTopicMap = {{ year_topic_map | safe }};
+const topics       = {{ topics | tojson }};
+const topicColors  = {{ topic_colors | tojson }};
+const allYears     = Object.keys(yearTopicMap).sort();
+const years        = allYears.slice(-15);
+
+function getMax() {
+  let max = 1;
+  years.forEach(y => topics.forEach(t => {
+    const v = (yearTopicMap[y] || {})[t] || 0;
+    if (v > max) max = v;
+  }));
+  return max;
+}
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+const maxCount = getMax();
+const tbody = document.getElementById('heatmapBody');
+if (tbody) {
+  [...years].reverse().forEach(year => {
+    const tr = document.createElement('tr');
+    const tdYear = document.createElement('td');
+    tdYear.className = 'year-label';
+    tdYear.textContent = year;
+    tr.appendChild(tdYear);
+    topics.forEach(topic => {
+      const cnt = (yearTopicMap[year] || {})[topic] || 0;
+      const td  = document.createElement('td');
+      if (cnt === 0) {
+        td.className = 'empty';
+        td.textContent = '–';
+      } else {
+        const intensity = 0.15 + (cnt / maxCount) * 0.85;
+        td.style.background = hexToRgba(topicColors[topic] || '#888', intensity);
+        td.style.color = intensity > 0.5 ? '#fff' : '#333';
+        td.textContent = cnt;
+        td.title = `${year} / ${topic}: ${cnt}건`;
+        td.addEventListener('click', () => {
+          location.href = `/articles?topic=${encodeURIComponent(topic)}&year_from=${year}&year_to=${year}`;
+        });
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+</script>
+{% endblock %}

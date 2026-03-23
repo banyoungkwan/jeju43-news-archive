@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}{{ cluster.event_title }} — 제주4·3 뉴스 아카이브{% endblock %}
+
+{% block content %}
+<div class="cluster-page">
+  <div class="container">
+
+    <!-- 브레드크럼 -->
+    <div class="breadcrumb">
+      <a href="{{ url_for('index') }}">홈</a>
+      <span class="bc-sep">›</span>
+      <span>사건 보도</span>
+    </div>
+
+    <!-- 클러스터 헤더 -->
+    <header class="cluster-header">
+      <h1 class="cluster-page-title">{{ cluster.event_title }}</h1>
+      <div class="cluster-header-meta">
+        <span class="ch-date">{{ (cluster.event_date or '')[:10] }}</span>
+        <span class="ch-divider">·</span>
+        <span class="ch-count">
+          <strong>{{ cluster.outlet_count }}</strong>개 언론사,
+          <strong>{{ cluster.article_count }}</strong>건 보도
+        </span>
+      </div>
+
+      {% if articles %}
+        {% set all_topics = [] %}
+        {% for a in articles %}
+          {% if a.topics %}
+            {% for t in a.topics.split(',') %}
+              {% if t.strip() not in all_topics %}
+                {% set _ = all_topics.append(t.strip()) %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+        {% if all_topics %}
+        <div class="cluster-header-topics">
+          {% for t in all_topics[:5] %}
+          <a href="{{ url_for('articles', topic=t) }}">
+            <span class="topic-badge" style="background:{{ topic_colors.get(t,'#888') }}">{{ t }}</span>
+          </a>
+          {% endfor %}
+        </div>
+        {% endif %}
+      {% endif %}
+    </header>
+
+    <!-- 언론사 네비게이션 앵커 -->
+    {% if articles | length > 1 %}
+    <nav class="outlet-nav">
+      <span class="outlet-nav-label">언론사 바로가기</span>
+      {% for a in articles %}
+      <a href="#article-{{ a.id }}" class="outlet-nav-chip">{{ a.media_outlet }}</a>
+      {% endfor %}
+    </nav>
+    {% endif %}
+
+    <!-- 기사 목록 -->
+    <div class="cluster-articles">
+      {% for a in articles %}
+      <article class="cluster-article" id="article-{{ a.id }}">
+
+        <!-- 언론사 헤더 -->
+        <div class="ca-outlet-bar">
+          <span class="ca-outlet-name">{{ a.media_outlet }}</span>
+          <div class="ca-outlet-meta">
+            <span class="card-lang">{{ a.language or 'ko' }}</span>
+            <span class="ca-date">{{ (a.published_at or '')[:10] }}</span>
+            {% if a.author %}<span class="ca-author">{{ a.author }}</span>{% endif %}
+          </div>
+        </div>
+
+        <!-- 제목 -->
+        <h2 class="ca-title">
+          <a href="{{ url_for('article_detail', article_id=a.id) }}">{{ a.title }}</a>
+        </h2>
+
+        <!-- AI 요약 -->
+        {% if a.summary %}
+        <div class="ca-summary">{{ a.summary }}</div>
+        {% endif %}
+
+        <!-- 본문 미리보기 (전문 있을 경우) -->
+        {% if a.content_text %}
+        <div class="ca-content-preview">
+          {% for para in a.content_text[:600].split('\n') %}
+            {% if para.strip() %}<p>{{ para.strip() }}</p>{% endif %}
+          {% endfor %}
+          {% if a.content_text | length > 600 %}
+          <div class="ca-read-more">
+            <a href="{{ url_for('article_detail', article_id=a.id) }}">전문 보기 →</a>
+          </div>
+          {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- 태그 + 원문 링크 -->
+        <div class="ca-footer">
+          <div class="ca-tags">
+            {% if a.tags %}
+              {% for tag in a.tags.split(',')[:5] %}
+              <a href="{{ url_for('articles', tag=tag.strip()) }}" class="tag">{{ tag.strip() }}</a>
+              {% endfor %}
+            {% endif %}
+          </div>
+          <a href="{{ a.url }}" target="_blank" rel="noopener" class="ca-external">
+            원문 보기
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+              <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+          </a>
+        </div>
+
+      </article>
+      {% endfor %}
+    </div>
+
+  </div>
+</div>
+{% endblock %}
