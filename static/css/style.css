@@ -148,6 +148,24 @@ img { max-width: 100%; display: block; }
 .nav-toggle.open span:nth-child(2) { opacity: 0; }
 .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
+/* ─── 히어로 반응형 ──────────────────────────────────────── */
+@media (max-width: 720px) {
+  .hero { padding: 36px 0 28px; }
+  .hero-inner {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  .hero-title { font-size: 1.6rem; }
+  .hero-sub { font-size: .88rem; }
+  .hero-stats {
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .stat-item { text-align: left; }
+  .stat-num { font-size: 1.5rem; }
+}
+
 /* ─── 반응형 헤더 ────────────────────────────────────────── */
 @media (max-width: 720px) {
   .header-inner {
