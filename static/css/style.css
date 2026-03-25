@@ -149,21 +149,29 @@ img { max-width: 100%; display: block; }
 .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 /* ─── 히어로 반응형 ──────────────────────────────────────── */
-@media (max-width: 720px) {
+@media (max-width: 900px) {
   .hero { padding: 36px 0 28px; }
   .hero-inner {
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 20px;
     align-items: start;
   }
-  .hero-title { font-size: 1.6rem; }
-  .hero-sub { font-size: .88rem; }
+  .hero-title {
+    font-size: 1.5rem;
+    word-break: keep-all;
+  }
+  .hero-sub { font-size: .875rem; }
   .hero-stats {
-    gap: 20px;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
   }
   .stat-item { text-align: left; }
-  .stat-num { font-size: 1.5rem; }
+  .stat-num { font-size: 1.4rem; }
+}
+@media (max-width: 480px) {
+  .hero-title { font-size: 1.25rem; }
+  .hero-stats { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* ─── 반응형 헤더 ────────────────────────────────────────── */
