@@ -268,6 +268,13 @@ def about():
     return render_template('about.html', outlets=outlets, stats=stats)
 
 
+@app.route('/outlets')
+def outlets_all():
+    outlets = db.get_outlets()
+    stats   = db.get_stats()
+    return render_template('outlets.html', outlets=outlets, stats=stats)
+
+
 # ── API: 스크래핑 트리거 (GitHub Actions용) ───────────────────
 
 @app.route('/api/scrape', methods=['POST'])

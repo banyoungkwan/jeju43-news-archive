@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}수집 언론사 전체 목록 — 제주4·3 뉴스 아카이브{% endblock %}
+
+{% block content %}
+<div class="about-page">
+  <div class="container">
+    <div class="about-content">
+
+      <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:8px;">
+        <h1 style="font-size:1.5rem;">수집 언론사 전체 목록</h1>
+        <a href="{{ url_for('about') }}" style="font-size:.85rem; color:var(--accent);">← 소개 페이지로</a>
+      </div>
+      <p style="color:var(--muted); font-size:.875rem; margin-bottom:20px;">
+        총 {{ outlets|length }}개 언론사 · {{ stats.total }}건 기사 수집
+      </p>
+
+      <table class="outlet-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>언론사</th>
+            <th>언어</th>
+            <th>수집 기사 수</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for o in outlets %}
+          <tr>
+            <td style="color:var(--muted); width:40px;">{{ loop.index }}</td>
+            <td>
+              <a href="{{ url_for('articles') }}?outlet={{ o.media_outlet | urlencode }}"
+                 style="color:var(--dark); font-weight:500;">
+                {{ o.media_outlet }}
+              </a>
+            </td>
+            <td><span class="card-lang">{{ o.language }}</span></td>
+            <td>{{ o.cnt }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

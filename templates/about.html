@@ -37,13 +37,20 @@
           </tr>
         </thead>
         <tbody>
-          {% for o in outlets %}
+          {% for o in outlets[:10] %}
           <tr>
             <td>{{ o.media_outlet }}</td>
             <td><span class="card-lang">{{ o.language }}</span></td>
             <td>{{ o.cnt }}</td>
           </tr>
           {% endfor %}
+          {% if outlets|length > 10 %}
+          <tr class="more-row">
+            <td colspan="3">
+              <a href="{{ url_for('outlets_all') }}">+ {{ outlets|length - 10 }}개 언론사 더 보기 →</a>
+            </td>
+          </tr>
+          {% endif %}
         </tbody>
       </table>
       {% endif %}
@@ -63,13 +70,13 @@
         <span class="topic-badge" style="background:#16a085; font-size:.85rem; padding:4px 12px">교육</span>
       </div>
 
-      <h2>제작</h2>
-      <p>
-        이 아카이브는 <strong>반영관</strong>이 기획·제작했습니다.<br>
-        <a href="https://banyoungkwan.github.io" target="_blank" rel="noopener" style="color:var(--accent)">banyoungkwan.github.io</a>
-        &nbsp;·&nbsp;
-        <a href="mailto:youngkwan.ban@gmail.com" style="color:var(--accent)">youngkwan.ban@gmail.com</a>
-      </p>
+      <div class="about-creator">
+        이 아카이브는 제주4·3 관련 언론보도들을 연구자와 일반 시민 모두가 보다 쉽게 접근할 수 있도록 하기 위해 만들어졌습니다.<br><br>
+        제작: <strong>반영관</strong> &nbsp;·&nbsp;
+        <a href="https://banyoungkwan.github.io" target="_blank" rel="noopener">banyoungkwan.github.io</a> &nbsp;·&nbsp;
+        <a href="mailto:youngkwan.ban@gmail.com">youngkwan.ban@gmail.com</a><br><br>
+        이 아카이브는 Anthropic의 <strong>Claude Sonnet</strong>을 활용한 바이브 코딩(vibe coding)으로 제작되었습니다.
+      </div>
 
       <h2>현황</h2>
       {% if stats %}
