@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+# jeju43.info을 실제 도메인으로 교체하세요
+Sitemap: https://jeju43.info/sitemap.xml

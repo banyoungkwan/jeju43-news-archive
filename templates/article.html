@@ -2,6 +2,43 @@
 
 {% block title %}{{ article.title }} — 제주4·3 뉴스 아카이브{% endblock %}
 
+{# ── 기사별 SEO 오버라이드 ── #}
+{% block meta_description %}{{ article.title }}. {{ article.media_outlet or '' }}{% if article.published_at %} ({{ article.published_at[:10] }}){% endif %} — 제주4·3 관련 보도{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ article.title }} — 제주4·3 뉴스 아카이브{% endblock %}
+{% block og_description %}{{ article.media_outlet or '' }}{% if article.published_at %} · {{ article.published_at[:10] }}{% endif %} — 제주4·3사건 관련 언론 보도{% endblock %}
+{% block tw_title %}{{ article.title }}{% endblock %}
+{% block tw_description %}{{ article.media_outlet or '' }}{% if article.published_at %} · {{ article.published_at[:10] }}{% endif %}{% endblock %}
+{% block canonical %}https://news.jeju43.info/articles/{{ article.id }}{% endblock %}
+
+{% block json_ld %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": {{ article.title | tojson }},
+  "url": {{ ("https://news.jeju43.info/articles/" ~ article.id) | tojson }},
+  "datePublished": {{ article.published_at | tojson }},
+  "inLanguage": {{ (article.language or "ko") | tojson }},
+  "publisher": {
+    "@type": "Organization",
+    "name": {{ article.media_outlet | tojson }}
+  },
+  "about": {
+    "@type": "Thing",
+    "name": "제주4·3사건",
+    "alternateName": "Jeju April 3rd Incident",
+    "description": "1947–1954년 제주도에서 발생한 무장봉기와 민간인 학살 사건"
+  },
+  "isPartOf": {
+    "@type": "DataCatalog",
+    "name": "제주4·3 뉴스 아카이브",
+    "url": "https://news.jeju43.info"
+  }
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="article-page">
   <div class="container article-layout">

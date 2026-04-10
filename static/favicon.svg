@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" fill="#1a1a1a" rx="10"/>
+  <text x="32" y="26" text-anchor="middle" font-family="'Noto Serif KR','Batang',serif" font-size="12" fill="#c0b8a8" letter-spacing="2">제주</text>
+  <text x="32" y="46" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="22" fill="#f0ece4" font-weight="bold">4·3</text>
+  <line x1="14" y1="51" x2="50" y2="51" stroke="#c0392b" stroke-width="2.5"/>
+</svg>

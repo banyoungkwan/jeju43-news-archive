@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- jeju43.info을 실제 도메인으로 교체하세요 / Replace jeju43.info with your actual domain -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- 메인 랜딩 페이지 / Main landing page -->
+  <url>
+    <loc>https://jeju43.info/</loc>
+    <lastmod>2026-03-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://jeju43.info/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jeju43.info/"/>
+  </url>
+
+  <!-- 제주4·3 소개 페이지 / About page -->
+  <url>
+    <loc>https://jeju43.info/about.html</loc>
+    <lastmod>2026-03-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://jeju43.info/about.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://jeju43.info/about.html"/>
+  </url>
+
+</urlset>

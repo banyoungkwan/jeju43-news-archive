@@ -18,6 +18,11 @@ from flask import (
 import database as db
 
 app = Flask(__name__)
+
+# Fly.io 리버스 프록시 뒤에서 request.url이 https://를 올바르게 반환하도록 설정
+from werkzeug.middleware.proxy_fix import ProxyFix
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
+
 app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-change-in-prod')
 
 PER_PAGE = 20
@@ -328,6 +333,62 @@ def api_backfill():
 @app.route('/api/stats')
 def api_stats():
     return jsonify(db.get_stats())
+
+
+# ── SEO: sitemap.xml / robots.txt ────────────────────────────
+
+from flask import make_response
+
+@app.route('/sitemap.xml')
+def sitemap():
+    conn = db.get_db()
+    articles = conn.execute(
+        "SELECT id, published_at FROM articles ORDER BY published_at DESC"
+    ).fetchall()
+    conn.close()
+
+    BASE = 'https://news.jeju43.info'
+    lines = ['<?xml version="1.0" encoding="UTF-8"?>',
+             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+
+    # 주요 페이지
+    for path, priority, freq in [
+        ('/',         '1.0', 'daily'),
+        ('/articles', '0.9', 'daily'),
+        ('/timeline', '0.7', 'weekly'),
+        ('/figures',  '0.6', 'weekly'),
+        ('/about',    '0.5', 'monthly'),
+    ]:
+        lines.append(
+            f'  <url><loc>{BASE}{path}</loc>'
+            f'<priority>{priority}</priority><changefreq>{freq}</changefreq></url>'
+        )
+
+    # 개별 기사 페이지
+    for art in articles:
+        lastmod = (art['published_at'] or '')[:10]
+        lastmod_tag = f'<lastmod>{lastmod}</lastmod>' if lastmod else ''
+        lines.append(
+            f'  <url><loc>{BASE}/articles/{art["id"]}</loc>'
+            f'{lastmod_tag}<priority>0.8</priority><changefreq>monthly</changefreq></url>'
+        )
+
+    lines.append('</urlset>')
+    resp = make_response('\n'.join(lines))
+    resp.headers['Content-Type'] = 'application/xml; charset=utf-8'
+    return resp
+
+
+@app.route('/robots.txt')
+def robots():
+    content = (
+        "User-agent: *\n"
+        "Allow: /\n\n"
+        "Sitemap: https://news.jeju43.info/sitemap.xml\n"
+    )
+    resp = make_response(content)
+    resp.headers['Content-Type'] = 'text/plain; charset=utf-8'
+    return resp
 
 
 # ── 에러 핸들러 ───────────────────────────────────────────────

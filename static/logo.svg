@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bgNews" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a1a1a"/>
+      <stop offset="100%" stop-color="#0d0d0d"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="400" height="400" fill="url(#bgNews)" rx="20"/>
+
+  <!-- Corner marks (light on dark) -->
+  <line x1="30" y1="35" x2="55" y2="35" stroke="#333" stroke-width="0.8"/>
+  <line x1="30" y1="35" x2="30" y2="60" stroke="#333" stroke-width="0.8"/>
+  <line x1="370" y1="35" x2="345" y2="35" stroke="#333" stroke-width="0.8"/>
+  <line x1="370" y1="35" x2="370" y2="60" stroke="#333" stroke-width="0.8"/>
+  <line x1="30" y1="365" x2="55" y2="365" stroke="#333" stroke-width="0.8"/>
+  <line x1="30" y1="365" x2="30" y2="340" stroke="#333" stroke-width="0.8"/>
+  <line x1="370" y1="365" x2="345" y2="365" stroke="#333" stroke-width="0.8"/>
+  <line x1="370" y1="365" x2="370" y2="340" stroke="#333" stroke-width="0.8"/>
+
+  <text x="200" y="82" text-anchor="middle" font-family="'Noto Serif KR','Batang',serif" font-size="14" fill="#888" letter-spacing="10">제주</text>
+  <text x="200" y="158" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="80" fill="#f0ece4" font-weight="bold" letter-spacing="-2">4·3</text>
+  <line x1="115" y1="175" x2="285" y2="175" stroke="#c0392b" stroke-width="2.5"/>
+  <text x="200" y="206" text-anchor="middle" font-family="'Noto Serif KR','Batang',serif" font-size="13" fill="#888" letter-spacing="6">언론 보도 기록</text>
+  <text x="200" y="227" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#666" letter-spacing="4">MEDIA COVERAGE RECORDS</text>
+
+  <!-- Camellia -->
+  <g transform="translate(200, 278) scale(0.55)">
+    <ellipse cx="0" cy="-12" rx="9" ry="13" fill="#c0392b" opacity="0.7" transform="rotate(0)"/>
+    <ellipse cx="0" cy="-12" rx="9" ry="13" fill="#c0392b" opacity="0.65" transform="rotate(72)"/>
+    <ellipse cx="0" cy="-12" rx="9" ry="13" fill="#c0392b" opacity="0.6" transform="rotate(144)"/>
+    <ellipse cx="0" cy="-12" rx="9" ry="13" fill="#c0392b" opacity="0.65" transform="rotate(216)"/>
+    <ellipse cx="0" cy="-12" rx="9" ry="13" fill="#c0392b" opacity="0.7" transform="rotate(288)"/>
+    <circle cx="0" cy="0" r="5" fill="#d4a830"/>
+  </g>
+
+  <text x="200" y="318" text-anchor="middle" font-family="'Noto Serif KR','Batang',serif" font-size="15" fill="#f0ece4" letter-spacing="5">뉴스 아카이브</text>
+  <text x="200" y="340" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#666" letter-spacing="3">NEWS ARCHIVE</text>
+  <text x="200" y="370" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#555" letter-spacing="4">news.jeju43.info</text>
+</svg>
