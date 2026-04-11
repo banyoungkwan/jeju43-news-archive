@@ -291,15 +291,25 @@ def api_scrape():
     try:
         import scraper
         import tagger
+        import threading
 
         new_count, err_count = scraper.run_all()
-        tagged = tagger.tag_untagged(batch_size=100)
+
+        # 태깅은 백그라운드에서 실행 (Fly.io HTTP 60s 타임아웃 방지)
+        def do_tag():
+            try:
+                tagger.tag_untagged(batch_size=100)
+            except Exception:
+                pass
+
+        thread = threading.Thread(target=do_tag, daemon=True)
+        thread.start()
 
         return jsonify({
             'status': 'ok',
             'new_articles': new_count,
             'errors': err_count,
-            'tagged': tagged,
+            'tagged': 'tagging_in_background',
         })
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
