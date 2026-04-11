@@ -8,7 +8,7 @@ import json
 import logging
 import re
 import time
-from openai import OpenAI, RateLimitError
+from openai import OpenAI, RateLimitError, APIStatusError
 
 import database as db
 
@@ -119,7 +119,11 @@ def tag_article(article_id: int) -> bool:
             },
         )
 
-        raw = response.choices[0].message.content.strip()
+        raw = response.choices[0].message.content
+        if raw is None:
+            log.error(f"[tagger] 빈 응답 (id={article_id}) — 스킵")
+            return False
+        raw = raw.strip()
 
         # thinking 모델의 <think>...</think> 태그 제거
         if '<think>' in raw:
@@ -166,6 +170,12 @@ def tag_article(article_id: int) -> bool:
         log.warning("[tagger] API rate limit — 60초 대기 후 재시도")
         time.sleep(60)
         return False
+    except APIStatusError as e:
+        if e.status_code == 402:
+            log.error(f"[tagger] 크레딧 부족 (402) — 즉시 중단")
+            raise  # tag_untagged에서 잡아 루프 종료
+        log.error(f"[tagger] API 오류 (id={article_id}): {e}")
+        return False
     except Exception as e:
         log.error(f"[tagger] 오류 (id={article_id}): {e}")
         return False
@@ -187,7 +197,13 @@ def tag_untagged(batch_size: int = 50):
 
     success = 0
     for article_id in ids:
-        ok = tag_article(article_id)
+        try:
+            ok = tag_article(article_id)
+        except APIStatusError as e:
+            if e.status_code == 402:
+                log.error(f"[tagger] 크레딧 부족으로 조기 종료 — {success}/{len(ids)}개 완료")
+                break
+            raise
         if ok:
             success += 1
         time.sleep(3)  # API rate limit 방지
