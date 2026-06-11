@@ -30,7 +30,7 @@
 <meta property="og:url" content="https://jeju43.info/">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:locale:alternate" content="en_US">
-<meta property="og:image" content="https://jeju43.info/og-image.jpg">
+<meta property="og:image" content="https://jeju43.info/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="제주4·3 지식 아카이브 — Jeju April 3rd Incident Knowledge Archive">
@@ -39,7 +39,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="제주4·3 지식 아카이브 | Jeju April 3rd Incident">
 <meta name="twitter:description" content="제주4·3사건의 뉴스·문서·보고서를 연결하는 디지털 허브. A bilingual knowledge hub for the Jeju April 3rd Incident.">
-<meta name="twitter:image" content="https://jeju43.info/og-image.jpg">
+<meta name="twitter:image" content="https://jeju43.info/og-image.png">
 
 <!-- JSON-LD Structured Data -->
 <script type="application/ld+json">
@@ -87,7 +87,14 @@
       "name": "미국자료 아카이브",
       "alternateName": "U.S. Documents Archive",
       "url": "https://archive.jeju43.info",
-      "description": "미국 국립문서기록관리청(NARA)에서 발굴한 미국 정부 문서 936건"
+      "description": "미국 국립문서기록관리청(NARA)에서 발굴한 미국 정부 문서 1,441건"
+    },
+    {
+      "@type": "Dataset",
+      "name": "제주4·3 지식 베이스",
+      "alternateName": "Jeju 4·3 Knowledge Base Wiki",
+      "url": "https://kb.jeju43.info",
+      "description": "1차 사료와 학술 연구 기반 연구자 위키. 162개 항목 — 개념, 인물, 기관, 사건, 소스 분석"
     },
     {
       "@type": "CreativeWork",
@@ -99,6 +106,10 @@
   ]
 }
 </script>
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@400;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -116,7 +127,7 @@
   --border-dark:#272727;
   --border-light:#d5d0c8;
   --text-dark:#e5e0d8;
-  --dim-dark:#6a6460;
+  --dim-dark:#8a8580;
   --text-light:#1a1814;
   --dim-light:#68635e;
 }
@@ -130,41 +141,60 @@ body:not(.en) .lang-en{display:none!important}
 /* ── NAV ─────────────────────────────────────────────── */
 #nav{position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;align-items:center;justify-content:space-between;padding:.85rem 5vw;transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
 #nav.solid{background:rgba(14,14,14,.97);border-color:var(--border-dark);backdrop-filter:blur(12px)}
-.nav-logo{font-family:'Libre Baskerville',serif;font-size:1rem;font-weight:700;color:var(--text-dark);text-decoration:none;letter-spacing:.01em;flex-shrink:0}
+.nav-logo{display:flex;align-items:center;gap:10px;font-family:'Libre Baskerville',serif;font-size:1rem;font-weight:700;color:var(--text-dark);text-decoration:none;letter-spacing:.01em;flex-shrink:0}
 .nav-logo em{color:var(--red);font-style:normal}
+.nav-logo-mark{width:30px;height:30px;border-radius:5px;flex-shrink:0}
 .nav-center{display:flex;align-items:center;gap:0}
-.nav-link{padding:.4rem 1rem;font-size:.77rem;letter-spacing:.06em;color:var(--dim-dark);text-decoration:none;font-weight:500;transition:color .2s;display:flex;align-items:center;gap:.45rem;white-space:nowrap}
+.nav-link{padding:.6rem 1rem;min-height:44px;display:inline-flex;align-items:center;font-size:.77rem;letter-spacing:.06em;color:var(--dim-dark);text-decoration:none;font-weight:500;transition:color .2s;gap:.45rem;white-space:nowrap}
 .nav-link:hover{color:var(--text-dark)}
 .nav-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
 .nav-dot.news{background:var(--gold)}
 .nav-dot.archive{background:#6bbfc6}
 .nav-dot.report{background:var(--red)}
 .nav-right{display:flex;align-items:center;gap:.8rem}
-.nav-about{font-size:.77rem;letter-spacing:.06em;color:var(--dim-dark);text-decoration:none;padding:.4rem 1rem;border:1px solid var(--border-dark);border-radius:3px;transition:all .2s}
+.nav-about{font-size:.77rem;letter-spacing:.06em;color:var(--dim-dark);text-decoration:none;padding:.6rem 1rem;min-height:44px;display:inline-flex;align-items:center;border:1px solid var(--border-dark);border-radius:3px;transition:all .2s}
 .nav-about:hover{color:var(--text-dark);border-color:#444}
 .nav-lang{display:flex;border:1px solid var(--border-dark);border-radius:3px;overflow:hidden}
-.nav-lang button{padding:.32rem .65rem;border:none;background:transparent;color:var(--dim-dark);cursor:pointer;font-size:.72rem;letter-spacing:.06em;font-family:'Inter',sans-serif;transition:all .2s}
+.nav-lang button{padding:.45rem .75rem;min-height:44px;border:none;background:transparent;color:var(--dim-dark);cursor:pointer;font-size:.72rem;letter-spacing:.06em;font-family:'Inter',sans-serif;transition:all .2s}
 .nav-lang button.active{background:var(--red);color:#fff}
 @media(max-width:800px){.nav-center .nav-label{display:none}.nav-link{padding:.4rem .55rem}}
 @media(max-width:560px){.nav-link:nth-child(n+3){display:none}.nav-about{display:none}}
+/* ── Mobile hamburger ── */
+.nav-hamburger{display:none;width:44px;height:44px;background:none;border:none;cursor:pointer;padding:8px;flex-direction:column;justify-content:center;gap:5px}
+.nav-hamburger span{display:block;width:20px;height:2px;background:var(--text-dark);transition:all .25s}
+.nav-hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.nav-hamburger.open span:nth-child(2){opacity:0}
+.nav-hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(14,14,14,.98);z-index:9998;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;padding:2rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:1.1rem;color:var(--text-dark);text-decoration:none;padding:.8rem 2rem;transition:color .2s;display:flex;align-items:center;gap:.6rem}
+.mobile-menu a:hover{color:var(--red)}
+.mobile-menu .mobile-lang{display:flex;gap:0;border:1px solid var(--border-dark);border-radius:3px;overflow:hidden;margin-top:1rem}
+.mobile-menu .mobile-lang button{padding:.5rem 1rem;border:none;background:transparent;color:var(--dim-dark);cursor:pointer;font-size:.85rem}
+.mobile-menu .mobile-lang button.active{background:var(--red);color:#fff}
+@media(max-width:560px){
+    .nav-center,.nav-about,.nav-lang{display:none!important}
+    .nav-hamburger{display:flex}
+}
 
 /* ── HERO ────────────────────────────────────────────── */
 #hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:7rem 5vw 7rem;position:relative;overflow:hidden}
 .hero-bg-num{position:absolute;bottom:-6vw;right:-3vw;font-family:'Libre Baskerville',serif;font-size:clamp(12rem,26vw,32rem);font-weight:700;color:rgba(255,255,255,.018);line-height:1;user-select:none;pointer-events:none;letter-spacing:-.04em}
-.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:end;max-width:1380px;position:relative;z-index:1}
-@media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:3rem}}
-.hero-eyebrow{font-size:.7rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;margin-bottom:1.8rem;font-weight:500}
+.hero-grid{display:grid;grid-template-columns:1fr;gap:4rem;max-width:1380px;position:relative;z-index:1}
+.hero-bottom{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start;margin-top:3rem;padding-top:3rem;border-top:1px solid var(--border-dark)}
+@media(max-width:900px){.hero-bottom{grid-template-columns:1fr;gap:2rem}}
+.hero-eyebrow{font-size:.8rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;margin-bottom:1.8rem;font-weight:500}
 .hero-title{font-family:'Noto Serif KR',serif;font-size:clamp(2.6rem,5vw,4.6rem);line-height:1.1;font-weight:700;margin-bottom:1.8rem;letter-spacing:-.01em;word-break:keep-all;overflow-wrap:normal}
 .hero-title-en{font-family:'Libre Baskerville',serif;font-size:clamp(2rem,4vw,3.8rem);line-height:1.14;font-weight:700;margin-bottom:1.8rem}
-.hero-quote{font-size:1rem;color:var(--dim-dark);line-height:1.9;border-left:2px solid var(--red);padding-left:1.3rem;font-style:italic;max-width:460px}
-.hero-quote cite{font-style:normal;font-size:.82rem;display:block;margin-top:.65rem;color:#4a4540}
+.hero-quote{font-size:1rem;color:var(--dim-dark);line-height:1.9;border-left:2px solid var(--red);padding-left:1.3rem;font-style:italic;max-width:560px}
+.hero-quote cite{font-style:normal;font-size:.82rem;display:block;margin-top:.65rem;color:#7a7570}
 
 /* right col */
 .hero-right{}
 .hero-what{font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:1.4rem;font-weight:500}
-.hero-desc{font-size:1.05rem;color:#a09890;line-height:1.9;margin-bottom:2rem}
+.hero-desc{font-size:1.05rem;color:#b5b0a8;line-height:1.9;margin-bottom:2rem}
 .hero-desc strong{color:var(--text-dark);font-weight:500}
-.hero-cta{display:inline-flex;align-items:center;gap:.5rem;font-size:.85rem;letter-spacing:.06em;color:var(--text-dark);text-decoration:none;padding:.65rem 1.4rem;border:1px solid #383838;border-radius:3px;transition:all .2s;font-weight:500}
+.hero-cta{display:inline-flex;align-items:center;gap:.5rem;font-size:.85rem;letter-spacing:.06em;color:var(--text-dark);text-decoration:none;padding:.75rem 1.6rem;min-height:44px;border:1px solid #383838;border-radius:3px;transition:all .2s;font-weight:500}
 .hero-cta:hover{background:var(--red);border-color:var(--red)}
 .hero-cta-en{display:none}
 body.en .hero-cta-ko{display:none!important}
@@ -194,21 +224,42 @@ body.en .hero-cta-en:hover{background:var(--red);border-color:var(--red)}
 .proj-intro{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-bottom:4.5rem;align-items:end}
 @media(max-width:800px){.proj-intro{grid-template-columns:1fr;gap:1.5rem;margin-bottom:3rem}}
 .proj-intro p{font-size:1.05rem;line-height:1.9;color:var(--dim-light)}
-.proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border-light)}
+.proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border-light)}
 @media(max-width:900px){.proj-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.proj-grid{grid-template-columns:1fr}}
+@media(max-width:768px){.proj-grid{grid-template-columns:1fr 1fr}.sec-head{grid-template-columns:1fr}.proj-intro{grid-template-columns:1fr}}
+@media(max-width:560px){
+    #hero{min-height:auto;padding:6rem 5vw 4rem}
+    .hero-grid{gap:2rem}
+    .hero-bottom{grid-template-columns:1fr;gap:2rem;margin-top:2rem;padding-top:2rem}
+    .hero-title{font-size:clamp(1.8rem,5vw,2.6rem)}
+    .hero-title-en{font-size:clamp(1.5rem,4vw,2rem)}
+    .hero-quote{font-size:.88rem}
+    .hero-desc{font-size:.92rem}
+    .proj-grid{grid-template-columns:1fr}
+    .pcard{padding:1.5rem 1.2rem}
+    .p-tag{font-size:.65rem}
+    .hero-scroll{margin-top:2rem;padding-top:1.5rem}
+}
+@media(max-width:375px){
+    #hero{padding:5rem 4vw 3rem}
+    .hero-title{font-size:1.6rem}
+    .hero-title-en{font-size:1.4rem}
+    .sec-title{font-size:1.4rem}
+    .pcard{padding:1.2rem 1rem}
+}
 .pcard{background:var(--paper);padding:2.8rem 2.2rem;display:flex;flex-direction:column;text-decoration:none;color:inherit;transition:background .2s;border-top:3px solid transparent}
 .pcard:hover{background:var(--paper2)}
 .pcard.news{border-top-color:var(--gold)}
 .pcard.archive{border-top-color:#5fb5bb}
 .pcard.report{border-top-color:var(--red)}
 .pcard.followup{border-top-color:#8e44ad}
+.pcard.wiki{border-top-color:#5a8a6a}
 .p-layer{font-size:.67rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim-light);margin-bottom:1.1rem;font-weight:500}
 .p-title{font-family:'Noto Serif KR',serif;font-size:1.2rem;font-weight:700;color:var(--text-light);margin-bottom:.3rem;line-height:1.3}
 .p-title-en{font-size:.88rem;font-style:italic;color:var(--dim-light);margin-bottom:1.2rem;font-family:'Libre Baskerville',serif}
 .p-desc{font-size:.92rem;color:var(--dim-light);line-height:1.82;flex:1;margin-bottom:1.8rem}
 .p-tags{display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:1.5rem}
-.p-tag{font-size:.68rem;padding:.18rem .52rem;border:1px solid var(--border-light);border-radius:20px;color:var(--dim-light)}
+.p-tag{font-size:.68rem;padding:.35rem .65rem;border:1px solid var(--border-light);border-radius:20px;color:var(--dim-light)}
 .p-link{font-size:.82rem;color:var(--red);font-weight:600;display:flex;align-items:center;gap:.35rem;margin-top:auto;transition:gap .2s}
 .pcard:hover .p-link{gap:.6rem}
 
@@ -228,16 +279,25 @@ footer{background:var(--ink);border-top:1px solid var(--border-dark);padding:4re
 .ft-data{font-size:.74rem;color:#2e2e2e;line-height:1.7}
 .ft-links{display:flex;flex-direction:column;gap:.5rem;text-align:right}
 @media(max-width:700px){.ft-links{text-align:left}}
-.ft-links a{font-size:.8rem;color:var(--dim-dark);text-decoration:none;transition:color .2s}
+.ft-links a{font-size:.8rem;color:var(--dim-dark);text-decoration:none;transition:color .2s;padding:.4rem 0;min-height:44px;display:inline-flex;align-items:center}
 .ft-links a:hover{color:var(--text-dark)}
+
+/* Accessibility: focus-visible */
+:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+
+.skip-link{position:absolute;top:-100%;left:16px;z-index:99999;padding:12px 24px;background:var(--red);color:#fff;font-size:14px;font-weight:600;border-radius:0 0 4px 4px;text-decoration:none;transition:top .2s}
+.skip-link:focus{top:0}
 
 </style>
 </head>
 <body class="ko">
 
+<a href="#main-content" class="skip-link">본문으로 건너뛰기</a>
+
 <!-- NAV -->
 <nav id="nav">
-  <a href="index.html" class="nav-logo">제주 <em>4·3</em></a>
+  <a href="index.html" class="nav-logo"><img class="nav-logo-mark" src="logo-navbar.svg" alt="제주 4·3" width="30" height="30">제주 <em>4·3</em></a>
   <div class="nav-center">
     <a href="https://news.jeju43.info/" target="_blank" class="nav-link">
       <span class="nav-dot news"></span>
@@ -258,31 +318,48 @@ footer{background:var(--ink);border-top:1px solid var(--border-dark);padding:4re
   <div class="nav-right">
     <a href="about.html" class="nav-about lang-ko">제주4·3이란?</a>
     <a href="about.html" class="nav-about lang-en">About 4·3</a>
-    <div class="nav-lang">
-      <button class="active" onclick="setLang('ko')">KO</button>
-      <button onclick="setLang('en')">EN</button>
+    <div class="nav-lang" role="group" aria-label="언어 전환">
+      <button class="active" onclick="setLang('ko')" aria-label="한국어">KO</button>
+      <button onclick="setLang('en')" aria-label="English">EN</button>
     </div>
   </div>
+  <button class="nav-hamburger" onclick="toggleMobileMenu()" aria-label="메뉴">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="https://news.jeju43.info/" target="_blank"><span class="nav-dot news"></span> <span class="lang-ko">뉴스 아카이브</span><span class="lang-en">News Archive</span></a>
+  <a href="https://archive.jeju43.info/" target="_blank"><span class="nav-dot archive"></span> <span class="lang-ko">미국자료 아카이브</span><span class="lang-en">U.S. Documents</span></a>
+  <a href="https://github.com/banyoungkwan/jeju43-report-english" target="_blank"><span class="nav-dot report"></span> <span class="lang-ko">영문 번역 프로젝트</span><span class="lang-en">English Report</span></a>
+  <a href="about.html"><span class="lang-ko">제주4·3이란?</span><span class="lang-en">About 4·3</span></a>
+  <div class="mobile-lang">
+    <button class="active" onclick="setLang('ko');toggleMobileMenu()">KO</button>
+    <button onclick="setLang('en');toggleMobileMenu()">EN</button>
+  </div>
+</div>
 
 <!-- HERO -->
 <section id="hero">
-  <div class="hero-bg-num">4·3</div>
+  <div id="main-content">
+    <div class="hero-bg-num">4·3</div>
   <div class="hero-grid">
     <div>
       <div class="hero-eyebrow lang-ko">제주 4·3 사건 지식 아카이브 — 1947–1954</div>
       <div class="hero-eyebrow lang-en">Jeju April 3rd Incident — Knowledge Archive — 1947–1954</div>
       <h1 class="hero-title lang-ko">기억이 말살된 곳에는<br>역사가 없습니다</h1>
       <h1 class="hero-title-en lang-en">Where memory is erased,<br>history ceases to exist</h1>
-      <blockquote class="hero-quote lang-ko">
-        반세기가 넘도록 기억을 말살당한 제주4·3은 한국 역사 속에 존재하지 않았던 것입니다. 공포에 질린 섬 주민들이 스스로 기억을 망각으로 돌이쳐서 죽이는 '기억의 자살'인 것입니다.
-        <cite>― 김석범, 소설 《화산도》 작가</cite>
-      </blockquote>
-      <blockquote class="hero-quote lang-en">
-        For more than half a century, the memory of Jeju 4·3 was erased — as if it had never existed in Korean history. Islanders, paralyzed by fear, drove their own memories into oblivion. This was "the suicide of memory."
-        <cite>― Kim Seok-beom, author of <em>Hwasando</em></cite>
-      </blockquote>
     </div>
+  </div>
+  <div class="hero-bottom">
+    <blockquote class="hero-quote lang-ko">
+      반세기가 넘도록 기억을 말살당한 제주4·3은 한국 역사 속에 존재하지 않았던 것입니다. 공포에 질린 섬 주민들이 스스로 기억을 망각으로 돌이쳐서 죽이는 '기억의 자살'인 것입니다.
+      <cite>― 김석범, 소설 《화산도》 작가</cite>
+    </blockquote>
+    <blockquote class="hero-quote lang-en">
+      For more than half a century, the memory of Jeju 4·3 was erased — as if it had never existed in Korean history. Islanders, paralyzed by fear, drove their own memories into oblivion. This was "the suicide of memory."
+      <cite>― Kim Seok-beom, author of <em>Hwasando</em></cite>
+    </blockquote>
     <div class="hero-right">
       <div class="hero-what lang-ko">제주4·3이란?</div>
       <div class="hero-what lang-en">What is Jeju 4·3?</div>
@@ -296,8 +373,9 @@ footer{background:var(--ink);border-top:1px solid var(--border-dark);padding:4re
       <a href="about.html" class="hero-cta-en">Learn more →</a>
     </div>
   </div>
-  <div class="hero-scroll lang-ko">아래로 스크롤하여 탐색</div>
-  <div class="hero-scroll lang-en">Scroll to explore</div>
+    <div class="hero-scroll lang-ko">아래로 스크롤하여 탐색</div>
+    <div class="hero-scroll lang-en">Scroll to explore</div>
+  </div>
 </section>
 
 
@@ -314,6 +392,19 @@ footer{background:var(--ink);border-top:1px solid var(--border-dark);padding:4re
       <p class="lang-en" style="font-size:1.05rem;line-height:1.9;color:var(--dim-light)">Jeju 4·3 can be understood through three layers of documentation: contemporary news media, declassified U.S. government records, and official truth investigation reports. Each archive illuminates the incident from a distinct vantage point.</p>
     </div>
     <div class="proj-grid">
+      <a href="https://archive.jeju43.info/" target="_blank" class="pcard archive">
+        <div class="p-layer lang-ko">역사적 증거 · 문서 아카이브</div>
+        <div class="p-layer lang-en">Historical Evidence · Documents</div>
+        <div class="p-title lang-ko">미국자료 아카이브</div>
+        <div class="p-title lang-en" style="font-family:'Libre Baskerville',serif">U.S. Documents Archive</div>
+        <div class="p-title-en lang-ko">U.S. Documents Archive</div>
+        <div class="p-title-en lang-en">archive.jeju43.info</div>
+        <p class="p-desc lang-ko">미국 국립문서기록관리청(NARA)에서 발굴한 미국 정부 문서 1,441건. G-2 정보보고서, 작전명령, 외교전문을 10개 권으로 분류하고 키워드로 탐색 가능하다. 미군정의 시각으로 4·3을 조명한다.</p>
+        <p class="p-desc lang-en">1,441 U.S. government documents from NARA — G-2 intelligence reports, operations orders, and diplomatic cables organized across 10 volumes. Illuminates 4·3 through the lens of the U.S. military government.</p>
+        <div class="p-tags"><span class="p-tag">1,441 documents</span><span class="p-tag">10 volumes</span><span class="p-tag">NARA · 1945–1950</span></div>
+        <span class="p-link lang-ko">아카이브 방문 →</span>
+        <span class="p-link lang-en">Visit Archive →</span>
+      </a>
       <a href="https://news.jeju43.info/" target="_blank" class="pcard news">
         <div class="p-layer lang-ko">현재의 기억 · 뉴스 아카이브</div>
         <div class="p-layer lang-en">Present Memory · News Archive</div>
@@ -327,18 +418,18 @@ footer{background:var(--ink);border-top:1px solid var(--border-dark);padding:4re
         <span class="p-link lang-ko">아카이브 방문 →</span>
         <span class="p-link lang-en">Visit Archive →</span>
       </a>
-      <a href="https://archive.jeju43.info/" target="_blank" class="pcard archive">
-        <div class="p-layer lang-ko">역사적 증거 · 문서 아카이브</div>
-        <div class="p-layer lang-en">Historical Evidence · Documents</div>
-        <div class="p-title lang-ko">미국자료 아카이브</div>
-        <div class="p-title lang-en" style="font-family:'Libre Baskerville',serif">U.S. Documents Archive</div>
-        <div class="p-title-en lang-ko">U.S. Documents Archive</div>
-        <div class="p-title-en lang-en">archive.jeju43.info</div>
-        <p class="p-desc lang-ko">미국 국립문서기록관리청(NARA)에서 발굴한 미국 정부 문서 936건. G-2 정보보고서, 작전명령, 외교전문을 5개 권으로 분류하고 152개 키워드로 탐색 가능하다. 미군정의 시각으로 4·3을 조명한다.</p>
-        <p class="p-desc lang-en">936 U.S. government documents from NARA — G-2 intelligence reports, operations orders, and diplomatic cables organized across 5 volumes with a 152-keyword index. Illuminates 4·3 through the lens of the U.S. military government.</p>
-        <div class="p-tags"><span class="p-tag">936 documents</span><span class="p-tag">5 volumes</span><span class="p-tag">NARA · 1945–1950</span></div>
-        <span class="p-link lang-ko">아카이브 방문 →</span>
-        <span class="p-link lang-en">Visit Archive →</span>
+      <a href="https://kb.jeju43.info/" target="_blank" class="pcard wiki">
+        <div class="p-layer lang-ko">학술 지식 베이스 · 연구 위키</div>
+        <div class="p-layer lang-en">Research Knowledge Base · Wiki</div>
+        <div class="p-title lang-ko">제주4·3 지식 베이스</div>
+        <div class="p-title lang-en" style="font-family:'Libre Baskerville',serif">Jeju 4·3 Knowledge Base</div>
+        <div class="p-title-en lang-ko">Knowledge Base Wiki</div>
+        <div class="p-title-en lang-en">kb.jeju43.info</div>
+        <p class="p-desc lang-ko">1차 사료와 학술 연구를 바탕으로 구축한 연구자 위키. 개념·인물·기관·사건·소스 162개 항목을 수록하며, 국가폭력·이행기정의·집단기억 등 핵심 개념과 미국 기밀해제 문서 분석을 포함한다.</p>
+        <p class="p-desc lang-en">A researcher's wiki built from primary sources and academic scholarship. 162 entries spanning key concepts (state violence, transitional justice, collective memory), entities, events, and source analyses — including declassified U.S. documents.</p>
+        <div class="p-tags"><span class="p-tag">162 entries</span><span class="p-tag">개념 · 인물 · 사건 · 소스</span><span class="p-tag">학술 연구 기반</span></div>
+        <span class="p-link lang-ko">위키 방문 →</span>
+        <span class="p-link lang-en">Visit Wiki →</span>
       </a>
       <a href="https://github.com/banyoungkwan/jeju43-report-english" target="_blank" class="pcard report">
         <div class="p-layer lang-ko">공식 서사 · 영문 번역</div>
@@ -377,10 +468,11 @@ footer{background:var(--ink);border-top:1px solid var(--border-dark);padding:4re
       <div class="ft-sub lang-en">제주 4·3 사건 지식 아카이브<br>March 1, 1947 – September 21, 1954 · Jeju Island</div>
       <div class="ft-data">지도 데이터: Cheju_1948Location.shp (EPSG:5179) · 제주4·3평화재단<br>보고서: 제주4·3사건 진상조사보고서 (2003) · 추가진상조사보고서 (2019)</div>
     </div>
-    <div class="ft-links">
+    <div class="ft-links" aria-label="사이트 링크">
       <a href="about.html">제주4·3이란? · About 4·3</a>
-      <a href="https://news.jeju43.info/" target="_blank">뉴스 아카이브 →</a>
       <a href="https://archive.jeju43.info/" target="_blank">미국자료 아카이브 →</a>
+      <a href="https://news.jeju43.info/" target="_blank">뉴스 아카이브 →</a>
+      <a href="https://kb.jeju43.info/" target="_blank">지식 베이스 위키 →</a>
       <a href="https://github.com/banyoungkwan/jeju43-report-english" target="_blank">영문 번역 프로젝트 →</a>
     </div>
   </div>
@@ -394,6 +486,14 @@ const NEWS_MONTHLY = {"2021-04": 1, "2021-05": 2, "2021-06": 4, "2021-07": 9, "2
 const DECISIONS = {"사망자 / Deceased": 10422, "행불자 / Disappeared": 3630, "수형자 / Imprisoned": 283, "후유장애자 / Injured": 196};
 const PERPETRATORS = {"토벌대 / Security Forces": 11408, "무장대 / Armed Guerrillas": 1776, "기타/모름 / Unknown": 1097, "기타 / Other": 252};
 const EVENT_PINS = [{"lat": 33.5505, "lng": 126.7547, "name_ko": "북촌리 학살", "name_en": "Bukchon-ri Massacre", "date": "1949.1.17", "desc_ko": "단일 마을 최대 피해지. 하루에 300여 명이 희생되었다.", "desc_en": "Worst single-village massacre. Around 300 villagers were killed in one day.", "victims": 448, "color": "#e74c3c"}, {"lat": 33.4836, "lng": 126.5027, "name_ko": "오라리 방화사건", "name_en": "Orari Arson Incident", "date": "1948.5.1", "desc_ko": "우익청년단에 의해 마을이 불태워진 사건. 무장봉기 평화협상을 방해하기 위한 도발이었다.", "desc_en": "The village was burned down by a right-wing youth group, sabotaging peace negotiations.", "victims": null, "color": "#e67e22"}, {"lat": 33.5086, "lng": 126.494, "name_ko": "정뜨르비행장", "name_en": "Jeju Airfield", "date": "1948~1949", "desc_ko": "토벌대에 의한 집단 처형 장소. 수많은 제주도민이 이곳에서 학살당했다.", "desc_en": "Site of mass executions by security forces.", "victims": null, "color": "#c0392b"}, {"lat": 33.2284, "lng": 126.2972, "name_ko": "섯알오름 학살", "name_en": "Seotal Oreum Massacre", "date": "1950.8", "desc_ko": "한국전쟁 발발 후 예비검속 피해자들이 집단 처형된 장소.", "desc_en": "Mass execution site of preventive detainees after the Korean War broke out.", "victims": 249, "color": "#c0392b"}, {"lat": 33.3036, "lng": 126.3547, "name_ko": "동광리 (무동이왓)", "name_en": "Donggwang-ri Village", "date": "1948.11~12", "desc_ko": "초토화 작전의 상징적 피해지. 마을 전체가 불태워졌다.", "desc_en": "Symbolic victim of the scorched-earth campaign. The entire village was burned.", "victims": 173, "color": "#e74c3c"}, {"lat": 33.3684, "lng": 126.7873, "name_ko": "가시리", "name_en": "Gasi-ri Village", "date": "1948~1949", "desc_ko": "표선면에서 가장 큰 피해를 입은 마을.", "desc_en": "The hardest-hit village in Pyoseon.", "victims": 421, "color": "#e74c3c"}, {"lat": 33.3459, "lng": 126.7143, "name_ko": "의귀리 학살", "name_en": "Uigwi-ri Massacre", "date": "1948.12", "desc_ko": "중산간 초토화 작전 당시 대규모 학살이 벌어진 곳.", "desc_en": "Site of large-scale massacre during the mid-mountain scorched-earth campaign.", "victims": 252, "color": "#e74c3c"}, {"lat": 33.4807, "lng": 126.7183, "name_ko": "선흘리", "name_en": "Seonheul-ri", "date": "1948~1949", "desc_ko": "동굴(목시물굴)에 피신했다가 발견되어 학살된 마을.", "desc_en": "Villagers hiding in the Moksimuljangul cave were discovered and massacred.", "victims": 220, "color": "#e74c3c"}];
+
+function toggleMobileMenu(){
+    const menu=document.getElementById('mobileMenu');
+    const btn=document.querySelector('.nav-hamburger');
+    menu.classList.toggle('open');
+    btn.classList.toggle('open');
+    document.body.style.overflow=menu.classList.contains('open')?'hidden':'';
+}
 
 function setLang(lang){
   document.body.classList.toggle('en', lang==='en');
