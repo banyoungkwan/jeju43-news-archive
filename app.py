@@ -325,15 +325,24 @@ def api_backfill():
 
     try:
         import backfill_naver
+        import tagger
+        import threading
+
         pages = int(request.args.get('pages', 10))
         query = request.args.get('query', None)
         queries = [query] if query else backfill_naver.QUERIES
         total = backfill_naver.backfill(queries, max_pages=pages)
 
-        import tagger
-        tagged = tagger.tag_untagged(batch_size=200)
+        def do_tag():
+            try:
+                tagger.tag_untagged(batch_size=500)
+            except Exception:
+                pass
 
-        return jsonify({'status': 'ok', 'new_articles': total, 'tagged': tagged})
+        thread = threading.Thread(target=do_tag, daemon=True)
+        thread.start()
+
+        return jsonify({'status': 'ok', 'new_articles': total, 'tagged': 'tagging_in_background'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
