@@ -1,0 +1,21 @@
+name: Keepalive
+
+on:
+  schedule:
+    # 매월 1일 오전 6시 KST (21:00 UTC 전월 말)
+    - cron: '0 21 1 * *'
+  workflow_dispatch:
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Keep workflows active
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow enable scrape.yml \
+            --repo ${{ github.repository }} || true
+          echo "Keepalive: $(date -u)"
